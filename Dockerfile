@@ -1,6 +1,10 @@
 FROM docker.io/centos
 
 ENV LANG en_US.UTF-8
+ENV PACKER_VERSION=1.7.2
+ENV TERRAFORM_VERSION=1.0.9
+ENV VAULT_VERSION=1.8.3
+
 LABEL com.bcgaudio.version="1.0" \
       com.bcgaudio.name="BCGAudio CentOS 8 Base Image" \
       com.bcgaudio.build-date="20200407" \
@@ -15,9 +19,9 @@ RUN groupadd -g 1000 jenkins \
     && yum clean all \
     && rm -rf /var/cache/yum \
     && architecture=$(case $(arch) in aarch64) echo "arm64";; x86_64) echo "amd64";; armv7l)  echo "arm";; esac) \
-    && curl https://releases.hashicorp.com/packer/1.5.6/packer_1.5.6_linux_${architecture}.zip -o /tmp/packer.zip && unzip /tmp/packer.zip -d /usr/local/bin/ && rm -rf /tmp/packer.zip \ 
-    && curl https://releases.hashicorp.com/vault/1.4.2/vault_1.4.2_linux_${architecture}.zip -o /tmp/vault.zip && unzip /tmp/vault.zip -d /usr/local/bin/ && rm -rf /tmp/vault.zip \
-    && curl https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_arm.zip -o /tmp/terraform.zip && unzip /tmp/terraform.zip -d /usr/local/bin/ && rm -rf /tmp/terraform.zip \
+    && curl https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_${architecture}.zip -o /tmp/packer.zip && unzip /tmp/packer.zip -d /usr/local/bin/ && rm -rf /tmp/packer.zip \ 
+    && curl https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_${architecture}.zip -o /tmp/vault.zip && unzip /tmp/vault.zip -d /usr/local/bin/ && rm -rf /tmp/vault.zip \
+    && curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_${architecture}.zip -o /tmp/terraform.zip && unzip /tmp/terraform.zip -d /usr/local/bin/ && rm -rf /tmp/terraform.zip \
     && pip3 install awscli \
     && mkdir -p /usr/share/ansible/plugins/lookup 
 
